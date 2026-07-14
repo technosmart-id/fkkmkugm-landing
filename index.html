@@ -284,6 +284,19 @@
 
   @media (max-width:900px){
     .nav-links{display:none;}
+    .nav-links.active{
+      display:flex;
+      flex-direction:column;
+      position:absolute;
+      top:100%;
+      left:0;
+      right:0;
+      background:var(--card);
+      border-bottom:1px solid var(--line);
+      padding:24px 32px;
+      gap:20px;
+      box-shadow:var(--shadow);
+    }
     .menu-btn{display:flex;}
     .hero-grid{grid-template-columns:1fr;}
     .venn-wrap{height:340px; order:-1;}
@@ -344,7 +357,7 @@
     <div>
       <span class="eyebrow"><span class="dot"></span> Fakultas Kedokteran, Kesehatan Masyarakat &amp; Keperawatan</span>
       <h1>Tiga profesi, <em>satu catatan</em> tentang bagaimana mereka belajar bekerja sebagai tim.</h1>
-      <p class="lead">CIPEP mendokumentasikan perjalanan kompetensi kolaboratif mahasiswa Kedokteran, Kesehatan Masyarakat, dan Keperawatan sepanjang rotasi klinis interprofesional di FKKMK UGM — dari refleksi individu hingga penilaian tim.</p>
+      <p class="lead">CIPEP mendokumentasikan perjalanan kompetensi kolaboratif mahasiswa Kedokteran, Gizi Kesehatan, dan Keperawatan sepanjang rotasi klinis interprofesional di FKKMK UGM — dari refleksi individu hingga penilaian tim.</p>
       <div class="hero-actions">
         <a href="https://cipep.fkkmk.net" class="btn-primary">
           Masuk ke Portofolio Saya
@@ -447,7 +460,7 @@
         <div class="flow-index">01</div>
         <div>
           <h3>Rotasi Klinis Interprofesional</h3>
-          <p>Mahasiswa Kedokteran, Kesehatan Masyarakat, dan Keperawatan ditempatkan dalam satu tim kasus di lahan praktik yang sama.</p>
+          <p>Mahasiswa Kedokteran, Gizi Kesehatan, dan Keperawatan ditempatkan dalam satu tim kasus di lahan praktik yang sama.</p>
         </div>
       </div>
       <div class="flow-item reveal">
@@ -490,9 +503,9 @@
         <div class="prof-bar"><span></span></div>
       </div>
       <div class="prof-card reveal">
-        <span class="prof-tag">Program Studi Kesehatan Masyarakat</span>
-        <h3>Kesehatan Masyarakat</h3>
-        <p>Membawa perspektif populasi dan determinan sosial ke meja tim klinis, menautkan kasus individu dengan konteks komunitas.</p>
+        <span class="prof-tag">Program Studi Gizi Kesehatan</span>
+        <h3>Gizi Kesehatan</h3>
+        <p>Membawa perspektif asuhan nutrisi klinis dan terapi dietetik ke dalam tim, mengoptimalkan status gizi pasien selama perawatan.</p>
         <div class="prof-bar"><span></span></div>
       </div>
       <div class="prof-card reveal">
@@ -566,13 +579,34 @@
   // Theme handling
   const root = document.documentElement;
   const toggle = document.getElementById('themeToggle');
+  const savedTheme = localStorage.getItem('theme');
   const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-  root.setAttribute('data-theme', prefersDark ? 'dark' : 'light');
+  const activeTheme = savedTheme || (prefersDark ? 'dark' : 'light');
+  root.setAttribute('data-theme', activeTheme);
 
   toggle.addEventListener('click', () => {
     const current = root.getAttribute('data-theme');
-    root.setAttribute('data-theme', current === 'dark' ? 'light' : 'dark');
+    const target = current === 'dark' ? 'light' : 'dark';
+    root.setAttribute('data-theme', target);
+    localStorage.setItem('theme', target);
   });
+
+  // Mobile menu toggle
+  const menuBtn = document.querySelector('.menu-btn');
+  const navLinks = document.querySelector('.nav-links');
+  
+  if (menuBtn && navLinks) {
+    menuBtn.addEventListener('click', () => {
+      navLinks.classList.toggle('active');
+    });
+
+    // Close menu when clicking a link
+    navLinks.querySelectorAll('a').forEach(link => {
+      link.addEventListener('click', () => {
+        navLinks.classList.remove('active');
+      });
+    });
+  }
 
   // Scroll reveal
   const revealEls = document.querySelectorAll('.reveal');
